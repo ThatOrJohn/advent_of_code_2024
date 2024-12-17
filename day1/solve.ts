@@ -41,6 +41,27 @@ export async function solve(): Promise<string> {
   return answer;
 }
 
+export function isReportSafe(levels: number[]): boolean {
+  if (levels.length < 2) return false;
+
+  const isIncreasing = levels.every(
+    (num, i, arr) => i === 0 || num > arr[i - 1]
+  );
+  const isDecreasing = levels.every(
+    (num, i, arr) => i === 0 || num < arr[i - 1]
+  );
+
+  if (!isIncreasing && !isDecreasing) return false;
+
+  const isDiffValid = levels.every(
+    (num, i, arr) =>
+      i === 0 ||
+      (Math.abs(num - arr[i - 1]) >= 1 && Math.abs(num - arr[i - 1]) <= 3)
+  );
+
+  return isDiffValid;
+}
+
 export async function GET(_req: Request): Promise<Response> {
   // console.log(_req);
   return new Response(await solve(), { status: 200 });
